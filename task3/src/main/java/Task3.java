@@ -17,15 +17,79 @@ import org.json.simple.parser.ParseException;
 //private static final String FILENAME = Task3.class.getResource(".").getPath() + "src/main/resources/values.json";
 
 public class Task3 {
-    public static void main(String[] args) {
-        String FILENAME = Task3.class.getResource(".").getPath() + "report.json";
-        System.out.println(FILENAME);
-        //Paths.get("./src/main/resources/values.json");
 
+    static void ft_eror(String s) {
+        System.err.println(s);
+        System.exit(1);
+    }
+
+    static JSONArray full_aray(JSONArray lang_1, Iterator i_1, HashMap<Object, Object> id_collect, JSONArray jsArray ) {
+//        Iterator i_1 = lang_1.iterator();
+        while (i_1.hasNext()) {
+            JSONObject innerObj_1 = (JSONObject) i_1.next();
+
+//            jsArray.add(innerObj_1);
+
+//            else
+//                jsArray.add(innerObj_1);
+            if (id_collect.containsKey((innerObj_1.get("id")))) {
+//                System.out.println("STR = " + (innerObj_1.get("id")) + " " + id_collect.get(innerObj_1.get("id")));
+                jsArray.add(innerObj_1);
+                innerObj_1.put("value", id_collect.get(innerObj_1.get("id")));
+
+            }
+            if (id_collect.containsKey((innerObj_1.get("values")))) {
+                JSONArray jsArray_2  = new JSONArray();
+                JSONArray lang_2 = (JSONArray) innerObj_1.get("values");
+                Iterator i_2 = lang_1.iterator();
+                if (i_2.hasNext()) {
+                    i_2.next();
+//                        jsArray.add(full_aray(lang_2, i_2, id_collect, jsArray_2));
+                    innerObj_1.put("values", full_aray(lang_2, i_2, id_collect, jsArray_2));
+                }
+//            } else {
+//                jsArray.add(innerObj_1);
+            }
+        }
+        return jsArray;
+    }
+
+    static HashMap<Object, Object>  full_map(HashMap<Object, Object> id_collect,  FileReader reader_2 ) throws IOException, ParseException {
+//        try {
+
+            JSONParser jsonParser_2 = new JSONParser();
+            JSONObject jsonObject_2 = (JSONObject) jsonParser_2.parse(reader_2);
+//            JSONObject jsonObject_2 = new JSONObject();
+                    JSONArray lang_2 = (JSONArray) jsonObject_2.get("values");
+            Iterator i_2 = lang_2.iterator();
+
+            while (i_2.hasNext()) {
+                JSONObject innerObj_2 = (JSONObject) i_2.next();
+                id_collect.put(innerObj_2.get("id"), innerObj_2.get("value"));
+            }
+//        } catch (EOFException ex) {
+//            ex.printStackTrace();
+//            System.exit(1);
+////        } catch (ParseException e) {
+////            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        return id_collect;
+    }
+
+    public static void main(String[] args) {
+        if (args.length != 2) {
+            ft_eror("Wrong number of arguments");
+        }
+
+        String FILENAME = Task3.class.getResource(".").getPath() + "report.json";
+//        System.out.println(FILENAME);
         JSONObject object_0 = new JSONObject();
         object_0.put("report","");
         JSONArray jsArray = new JSONArray();
         HashMap<Object, Object> id_collect = new HashMap<>();
+
 
 
         try (FileWriter writer = new FileWriter(FILENAME)){
@@ -34,62 +98,31 @@ public class Task3 {
 
             JSONParser jsonParser_1 = new JSONParser();
             JSONObject jsonObject_1 = (JSONObject) jsonParser_1.parse(reader_1);
-
-            System.out.println(jsonObject_1);
-            FileReader reader_2 = new FileReader(new File(args[1]));
-
-            JSONParser jsonParser_2 = new JSONParser();
-            JSONObject jsonObject_2 = (JSONObject) jsonParser_2.parse(reader_2);
-            System.out.println(jsonObject_2);
-
+//            JSONObject jsonObject_1 =  new JSONObject().getJSONObject();
+//            JSONArray lang_1 = jsonObject_1.getJSONArray("test");
+//            JSONArray lang_1= (JSONArray) jsonObject_1.getJSONObject("tests");
 
             // получение массива
-            JSONArray lang_1= (JSONArray) jsonObject_1.get("tests");
-            System.out.println("The first name is: " + lang_1);
-            JSONArray lang_2= (JSONArray) jsonObject_2.get("values");
-            System.out.println("The first name is: " + lang_2);
+            System.out.println(jsonObject_1);
+            JSONArray lang_1=  (JSONArray)  jsonObject_1.get("tests");
 
-
-
-            Iterator i_2 = lang_2.iterator();
-
-            while (i_2.hasNext()) {
-                JSONObject innerObj_2 = (JSONObject) i_2.next();
-                id_collect.put(innerObj_2.get("id") , innerObj_2.get("value"));
-            }
+            FileReader reader_2 = new FileReader(new File(args[1]));
+            id_collect = full_map(id_collect, reader_2);
             //            берем элементы массива
 
-            Iterator i_1 = lang_1.iterator();
 
             // берем каждое значение из массива json отдельно
-            while (i_1.hasNext()) {
-                JSONObject innerObj_1 = (JSONObject) i_1.next();
-
-                    if (id_collect.containsKey((innerObj_1.get("id")))) {
-                        System.out.println("STR = " + (innerObj_1.get("id")) + " " + id_collect.get(innerObj_1.get("id")));
-                        jsArray.add(innerObj_1);
-                        innerObj_1.put("value", id_collect.get(innerObj_1.get("id")));
-                    }
-                    else {
-                        jsArray.add(innerObj_1);
-                    }
-//
-            }
-
-//            берем элементы массива
-//            for(int i=0; i<lang_2.size(); i++){
-////                System.out.println("The " + i + " element of the array: "+lang_2.get(i));
-//                jsArray.add(lang_2.get(i));
-//            }
+            Iterator i_1 = lang_1.iterator();
+            jsArray = full_aray(lang_1, i_1, id_collect, jsArray);
 
             object_0.put("report", jsArray);
             writer.write(object_0.toJSONString());
             writer.flush();
             writer.close();
 
-        } catch (ParseException | FileNotFoundException ex) {
-            ex.printStackTrace();
-       } catch (IOException e) {
+//        } catch (ParseException | FileNotFoundException ex) {
+//            ex.printStackTrace();
+       } catch (IOException | ParseException e) {
            e.printStackTrace();
        }
 
