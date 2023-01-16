@@ -2,19 +2,14 @@
 //import javax.json.stream.*;
 
 import java.io.*;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Iterator;
 
-
-import com.sun.javafx.collections.MappingChange;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-
-//private static final String FILENAME = Task3.class.getResource(".").getPath() + "src/main/resources/values.json";
 
 public class Task3 {
 
@@ -23,8 +18,74 @@ public class Task3 {
         System.exit(1);
     }
 
+        static JSONArray ft_values(JSONArray lang_1, Iterator i_1, HashMap<Object, Object> id_collect, JSONObject innerObj_1, JSONArray jsArray) {
+//            System.out.println("STR = " + (innerObj_1.get("id")) + " " + id_collect.get(innerObj_1.get("id")));
+//            if (id_collect.containsKey((innerObj_1.get("id")))) {
+//                jsArray = ft_id(lang_1, i_1, id_collect, innerObj_1, jsArray);
+//            }
+
+
+
+            JSONArray jsArray_2 = new JSONArray();
+            JSONArray lang_2 = (JSONArray) innerObj_1.get("values");
+            Iterator i_2 = lang_1.iterator();
+            if (i_2.hasNext()) {
+//                if (id_collect.containsKey((innerObj_1.get("id")))) {
+//                    jsArray = ft_id(lang_1, i_1, id_collect, innerObj_1, jsArray);
+//                }
+                i_2.next();
+                jsArray_2 = (full_aray(lang_2, i_2, id_collect, jsArray_2));
+//                innerObj_1.put("values", jsArray_2);
+
+            }
+
+        return jsArray;
+
+    }
+    static JSONArray ft_id(JSONArray lang_1, Iterator i_1, HashMap<Object, Object> id_collect, JSONObject innerObj_1, JSONArray jsArray ) {
+
+//                System.out.println("STR = " + (innerObj_1.get("id")) + " " + id_collect.get(innerObj_1.get("id")));
+//            jsArray.add(innerObj_1);
+
+
+
+            innerObj_1.put("value", id_collect.get(innerObj_1.get("id")));
+//            if (innerObj_1.get("values")) {
+                JSONArray jsArray_2 = new JSONArray();
+        JSONArray lang_2 = (JSONArray) innerObj_1.get("values");
+        if (lang_2 != null) {
+            Iterator i_2 = lang_2.iterator();
+            while (i_2.hasNext()) {
+                jsArray_2 = full_aray(lang_2, i_2, id_collect, jsArray_2);
+
+//                JSONObject innerObj_2 = (JSONObject) i_2.next();
+//            innerObj_2.put("values", jsArray_2);
+
+//            JSONObject innerObj_2 = (JSONObject) i_2.next();
+//            id_collect.put(innerObj_2.get("id"), innerObj_2.get("value"));
+            }
+            innerObj_1.put("values", jsArray_2);
+        }
+
+
+//            }
+//            if (innerObj_1.containsKey((innerObj_1.get("values")))) {
+//                System.out.println("HJK");
+////                JSONArray jsArray_2 = new JSONArray();
+//                jsArray_2 = full_aray(lang_1, i_1, id_collect, jsArray_2);
+//                System.out.println(jsArray_2);
+//                innerObj_1.put("values",  jsArray_2);
+////                jsArray = ft_values(lang_1, i_1, id_collect, innerObj_1, jsArray);
+//            }
+        jsArray.add(innerObj_1);
+        return jsArray;
+    }
+
+
+
     static JSONArray full_aray(JSONArray lang_1, Iterator i_1, HashMap<Object, Object> id_collect, JSONArray jsArray ) {
-//        Iterator i_1 = lang_1.iterator();
+
+        //        Iterator i_1 = lang_1.iterator();
         while (i_1.hasNext()) {
             JSONObject innerObj_1 = (JSONObject) i_1.next();
 
@@ -33,23 +94,32 @@ public class Task3 {
 //            else
 //                jsArray.add(innerObj_1);
             if (id_collect.containsKey((innerObj_1.get("id")))) {
-//                System.out.println("STR = " + (innerObj_1.get("id")) + " " + id_collect.get(innerObj_1.get("id")));
-                jsArray.add(innerObj_1);
-                innerObj_1.put("value", id_collect.get(innerObj_1.get("id")));
-
+                jsArray = ft_id(lang_1, i_1, id_collect, innerObj_1, jsArray);
             }
-            if (id_collect.containsKey((innerObj_1.get("values")))) {
-                JSONArray jsArray_2  = new JSONArray();
-                JSONArray lang_2 = (JSONArray) innerObj_1.get("values");
-                Iterator i_2 = lang_1.iterator();
-                if (i_2.hasNext()) {
-                    i_2.next();
-//                        jsArray.add(full_aray(lang_2, i_2, id_collect, jsArray_2));
-                    innerObj_1.put("values", full_aray(lang_2, i_2, id_collect, jsArray_2));
-                }
-//            } else {
+//            if (id_collect.containsKey((innerObj_1.get("values")))) {
+//                jsArray = ft_values(lang_1, i_1, id_collect, innerObj_1, jsArray);
+//            }
+//            if (id_collect.containsKey((innerObj_1.get("id")))) {
+////                System.out.println("STR = " + (innerObj_1.get("id")) + " " + id_collect.get(innerObj_1.get("id")));
 //                jsArray.add(innerObj_1);
-            }
+//                innerObj_1.put("value", id_collect.get(innerObj_1.get("id")));
+//
+//            }
+//            if (id_collect.containsKey((innerObj_1.get("values")))) {
+//                JSONArray jsArray_2  = new JSONArray();
+//                JSONArray lang_2 = (JSONArray) innerObj_1.get("values");
+//                Iterator i_2 = lang_1.iterator();
+//                if (i_2.hasNext()) {
+//                    i_2.next();
+////                        jsArray.add(full_aray(lang_2, i_2, id_collect, jsArray_2));
+//                    innerObj_1.put("values", full_aray(lang_2, i_2, id_collect, jsArray_2));
+//                    if (id_collect.containsKey((innerObj_1.get("id")))) {
+//                        jsArray = ft_id(i_1, id_collect, innerObj_1, jsArray);
+//                    }
+//                }
+////            } else {
+////                jsArray.add(innerObj_1);
+//            }
         }
         return jsArray;
     }
@@ -67,14 +137,6 @@ public class Task3 {
                 JSONObject innerObj_2 = (JSONObject) i_2.next();
                 id_collect.put(innerObj_2.get("id"), innerObj_2.get("value"));
             }
-//        } catch (EOFException ex) {
-//            ex.printStackTrace();
-//            System.exit(1);
-////        } catch (ParseException e) {
-////            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         return id_collect;
     }
 
@@ -86,7 +148,7 @@ public class Task3 {
         String FILENAME = Task3.class.getResource(".").getPath() + "report.json";
 //        System.out.println(FILENAME);
         JSONObject object_0 = new JSONObject();
-        object_0.put("report","");
+//        object_0.put("report","");
         JSONArray jsArray = new JSONArray();
         HashMap<Object, Object> id_collect = new HashMap<>();
 
